@@ -307,15 +307,6 @@ def GetPieceName(Board, StartRank, StartFile, FinishRank, FinishFile):
     TypeFinish = "Sarrum"
   return ColourStart, TypeStart, ColourFinish, TypeFinish
 
-  
-  
-    
-  
-
-
-
-
-
     
 if __name__ == "__main__":
   Board = CreateBoard() #0th index not used
