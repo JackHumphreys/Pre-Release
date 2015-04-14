@@ -307,6 +307,31 @@ def GetPieceName(Board, StartRank, StartFile, FinishRank, FinishFile):
     TypeFinish = "Sarrum"
   return ColourStart, TypeStart, ColourFinish, TypeFinish
 
+def display_menu():
+  print()
+  print("MAIN MENU")
+  print()
+  print("1. Start ne game")
+  print("2. Load existing game")
+  print("3. Play same game")
+  print("4. View high scores")
+  print("5. Settings ")
+  print("6. Quit program")
+  print()
+  print("Select an option from the menu: ", end="")
+
+def get_menu_selection():
+  selection = int(input("Select an option from the menu: "))
+  while 1 > selection > 5:
+    print("Your input is invalid. Try again.")
+    selection = int(input("Select an option from the menu: "))
+  return selection
+  
+def make_selection(selection):
+  while selection != 6:
+    
+    
+  
     
 if __name__ == "__main__":
   Board = CreateBoard() #0th index not used
