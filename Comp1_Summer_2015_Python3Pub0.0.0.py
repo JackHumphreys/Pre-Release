@@ -320,15 +320,15 @@ def display_menu():
   print()
   print("Select an option from the menu: ", end="")
 
-def get_menu_selection():
-  selection = int(input("Select an option from the menu: "))
-  while 1 > selection > 5:
-    print("Your input is invalid. Try again.")
-    selection = int(input("Select an option from the menu: "))
-  return selection
+#def get_menu_selection():
+  #selection = int(input("Select an option from the menu: "))
+  #while 1 > selection > 5:
+    #print("Your input is invalid. Try again.")
+    #selection = int(input("Select an option from the menu: "))
+  #return selection
   
-def make_selection(selection):
-  while selection != 6:
+#def make_selection(selection):
+  #while selection != 6:
     
     
   
