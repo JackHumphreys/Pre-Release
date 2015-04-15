@@ -153,15 +153,8 @@ def CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseT
         MoveIsLegal = CheckEtluMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
   return MoveIsLegal
 
-def InitialiseBoard(Board):
-    TypeOfGame = GetTypeOfGame()
-    SampleGameValidation = ["y","Y","Yes","yes","n","N","No","no"]
-    SampleGameYes = ["y","Y","Yes","yes"]
-    SampleGameNo = ["n","N","No","no"]
-    while TypeOfGame not in SampleGameValidation:
-      print("Your input is not valid.")
-      TypeOfGame = GetTypeOfGame()
-    if TypeOfGame in SampleGameYes: 
+def InitialiseBoard(Board, selection): 
+    if selection == 3: 
       for RankNo in range(1, BOARDDIMENSION + 1):
         for FileNo in range(1, BOARDDIMENSION + 1):
           Board[RankNo][FileNo] = "  "
@@ -173,7 +166,7 @@ def InitialiseBoard(Board):
       Board[3][2] = "BE"
       Board[3][8] = "BE"
       Board[6][8] = "BR"
-    elif TypeOfGame in SampleGameNo:
+    else:
       for RankNo in range(1, BOARDDIMENSION + 1):
         for FileNo in range(1, BOARDDIMENSION + 1):
           if RankNo == 2:
@@ -203,11 +196,11 @@ def GetMove(StartSquare, FinishSquare):
   correct = False
   while not correct:
     try:
-      StartSquare = int(input("Enter coordinates of square containing piece to move (file first): "))
+      StartSquare = int(input("Enter coordinates of square containing piece to move (file first) or type '-1' for menu: "))
       StartSquareString = str(StartSquare)
       while len(StartSquareString) < 2:
         print("Please provide both FILE and RANK for this move.")
-        StartSquare = int(input("Enter coordinates of square containing piece to move (file first): "))
+        StartSquare = int(input("Enter coordinates of square containing piece to move (file first) or type '-1' for menu: "))
         StartSquareString = str(StartSquare)
       correct = True
     except ValueError:
@@ -246,6 +239,8 @@ def MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
       Board[StartRank][StartFile] = "  "
 
 def ConfirmMove(StartSquare, FinishSquare):
+  if StartSquare == -1:
+    ###########
   StartRank = StartSquare % 10
   StartFile = StartSquare // 10
   FinishRank = FinishSquare % 10
@@ -311,27 +306,20 @@ def display_menu():
   print()
   print("MAIN MENU")
   print()
-  print("1. Start ne game")
+  print("1. Start new game")
   print("2. Load existing game")
-  print("3. Play same game")
+  print("3. Play sample game")
   print("4. View high scores")
   print("5. Settings ")
   print("6. Quit program")
   print()
-  print("Select an option from the menu: ", end="")
 
 def get_menu_selection():
   selection = int(input("Select an option from the menu: "))
-  while 1 > selection > 5:
+  while selection > 6 or selection < 1:
     print("Your input is invalid. Try again.")
     selection = int(input("Select an option from the menu: "))
   return selection
-  
-
-
-    
-    
-  
     
 def play_game():
   Board = CreateBoard() #0th index not used
@@ -341,7 +329,7 @@ def play_game():
   while PlayAgain == "Y":
     WhoseTurn = "W"
     GameOver = False
-    InitialiseBoard(Board)
+    InitialiseBoard(Board, selection)
     while not(GameOver):
       DisplayBoard(Board)
       DisplayWhoseTurnItIs(WhoseTurn)
@@ -371,12 +359,24 @@ def play_game():
     if ord(PlayAgain) >= 97 and ord(PlayAgain) <= 122:
       PlayAgain = chr(ord(PlayAgain) - 32)
 
-def make_selection(selection):
+def make_selection():
   if __name__ == "__main__":
-    selection = 0
-    while selection != 6:
-      display_menu()
-      if choice
+    if selection == 1:
+      play_game()
+    elif selection == 2:
+      pass
+    elif selection == 3:
+      play_game()
+    elif selection == 4:
+      pass
+    elif selection == 5:
+      pass
+    elif selection == 6:
+      quit()
+        
+display_menu()
+selection = get_menu_selection()    
+make_selection()
 
 
 
