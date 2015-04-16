@@ -197,12 +197,16 @@ def GetMove(StartSquare, FinishSquare):
   while not correct:
     try:
       StartSquare = int(input("Enter coordinates of square containing piece to move (file first) or type '-1' for menu: "))
-      StartSquareString = str(StartSquare)
-      while len(StartSquareString) < 2:
-        print("Please provide both FILE and RANK for this move.")
-        StartSquare = int(input("Enter coordinates of square containing piece to move (file first) or type '-1' for menu: "))
+      if StartSquare == -1:
+        display_pause_menu()
+        pause_menu_selection = get_pause_menu_selection()
+      else:
         StartSquareString = str(StartSquare)
-      correct = True
+        while len(StartSquareString) < 2:
+          print("Please provide both FILE and RANK for this move.")
+          StartSquare = int(input("Enter coordinates of square containing piece to move (file first) or type '-1' for menu: "))
+          StartSquareString = str(StartSquare)
+        correct = True
     except ValueError:
       print("Error! Please enter a valid integer.")
   correct2 = False
@@ -239,8 +243,6 @@ def MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
       Board[StartRank][StartFile] = "  "
 
 def ConfirmMove(StartSquare, FinishSquare):
-  if StartSquare == -1:
-    ###########
   StartRank = StartSquare % 10
   StartFile = StartSquare // 10
   FinishRank = FinishSquare % 10
@@ -320,8 +322,32 @@ def get_menu_selection():
     print("Your input is invalid. Try again.")
     selection = int(input("Select an option from the menu: "))
   return selection
-    
-def play_game():
+
+def display_pause_menu():
+  print()
+  print("Options")
+  print()
+  print("1. Save Game")
+  print("2. Quit to Menu")
+  print("3. Return to Game")
+
+#############
+
+def get_pause_menu_selection():
+  print()
+  pause_menu_selection = int(input("Please select an option: "))
+  while pause_menu_selection > 3 or pause_menu_selection < 1:
+    print("Your input is invalid. Try again.")
+    pause_menu_selection = int(input("Please select an option: "))
+  if pause_menu_selection == 1:
+    pass
+  elif pause_menu_selection == 2:
+    main_menu()
+  elif pause_menu_selection == 3:
+    pass
+  return pause_menu_selection
+     
+def play_game(selection):
   Board = CreateBoard() #0th index not used
   StartSquare = 0 
   FinishSquare = 0
@@ -359,26 +385,28 @@ def play_game():
     if ord(PlayAgain) >= 97 and ord(PlayAgain) <= 122:
       PlayAgain = chr(ord(PlayAgain) - 32)
 
-def make_selection():
+def make_selection(selection):
   if __name__ == "__main__":
     if selection == 1:
-      play_game()
+      play_game(selection)
     elif selection == 2:
       pass
     elif selection == 3:
-      play_game()
+      play_game(selection)
     elif selection == 4:
       pass
     elif selection == 5:
       pass
     elif selection == 6:
       quit()
-        
-display_menu()
-selection = get_menu_selection()    
-make_selection()
+
+def main_menu():        
+  display_menu()
+  selection = get_menu_selection()    
+  make_selection(selection)
 
 
+main_menu()
 
 
 
