@@ -121,9 +121,9 @@ def CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseT
   MoveIsLegal = True
   if FinishFile < 1 or FinishFile > 8:
     MoveIsLegal = False
-  if FinishRank < 1 or FinishRank > 8:
+  elif FinishRank < 1 or FinishRank > 8:
     MoveIsLegal = False
-  if (FinishFile == StartFile) and (FinishRank == StartRank):
+  elif (FinishFile == StartFile) and (FinishRank == StartRank):
     MoveIsLegal = False
   else:
     PieceType = Board[StartRank][StartFile][1]
