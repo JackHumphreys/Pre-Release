@@ -119,11 +119,11 @@ def CheckEtluMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
 
 def CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
   MoveIsLegal = True
-  if FinishFile < 1 or FinishFile > 8:
+  if 0 > FinishFile > BOARDDIMESION:
     MoveIsLegal = False
-  if FinishRank < 1 or FinishRank > 8:
+  elif 0 > FinishRank > BOARDDIMESION:
     MoveIsLegal = False
-  if (FinishFile == StartFile) and (FinishRank == StartRank):
+  elif (FinishFile == StartFile) and (FinishRank == StartRank):
     MoveIsLegal = False
   else:
     PieceType = Board[StartRank][StartFile][1]
@@ -340,12 +340,17 @@ def get_pause_menu_selection():
     print("Your input is invalid. Try again.")
     pause_menu_selection = int(input("Please select an option: "))
   if pause_menu_selection == 1:
-    pass
+    save = save_game(Board)
+    print("Save successful.")
   elif pause_menu_selection == 2:
     main_menu()
   elif pause_menu_selection == 3:
     pass
   return pause_menu_selection
+
+def save_game(Board):
+  saved_board = Board
+  return saved_board
      
 def play_game(selection):
   Board = CreateBoard() #0th index not used
@@ -358,6 +363,7 @@ def play_game(selection):
     InitialiseBoard(Board, selection)
     while not(GameOver):
       DisplayBoard(Board)
+      #pdb.set_trace()
       DisplayWhoseTurnItIs(WhoseTurn)
       MoveIsLegal = False
       while not(MoveIsLegal):
