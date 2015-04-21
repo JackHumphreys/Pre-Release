@@ -121,9 +121,9 @@ def CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseT
   MoveIsLegal = True
   if FinishFile < 1 or FinishFile > 8:
     MoveIsLegal = False
-  if FinishRank < 1 or FinishRank > 8:
+  elif FinishRank < 1 or FinishRank > 8:
     MoveIsLegal = False
-  if (FinishFile == StartFile) and (FinishRank == StartRank):
+  elif (FinishFile == StartFile) and (FinishRank == StartRank):
     MoveIsLegal = False
   else:
     PieceType = Board[StartRank][StartFile][1]
@@ -205,7 +205,7 @@ def GetMove(StartSquare, FinishSquare):
     try:
       StartSquare = int(input("Enter coordinates of square containing piece to move (file first): "))
       StartSquareString = str(StartSquare)
-      while len(StartSquareString) < 2:
+      while len(StartSquareString) < 2 or len(StartSquareString) > 2:
         print("Please provide both FILE and RANK for this move.")
         StartSquare = int(input("Enter coordinates of square containing piece to move (file first): "))
         StartSquareString = str(StartSquare)
@@ -217,7 +217,7 @@ def GetMove(StartSquare, FinishSquare):
     try:  
       FinishSquare = int(input("Enter coordinates of square to move piece to (file first): "))
       FinishSquareString = str(FinishSquare)
-      while len(FinishSquareString) < 2:
+      while len(FinishSquareString) < 2 or len(StartSquareString) > 2:
         print("Please provide both FILE and RANK for this move.")
         FinishSquare = int(input("Enter coordinates of square to move piece to (file first): "))
         FinishSquareString = str(FinishSquare)
