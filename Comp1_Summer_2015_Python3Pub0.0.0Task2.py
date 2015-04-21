@@ -318,7 +318,7 @@ def display_menu():
 
 def get_menu_selection():
   selection = int(input("Select an option from the menu: "))
-  while selection > 6 or selection < 1:
+  while 1 > selection > 6:
     print("Your input is invalid. Try again.")
     selection = int(input("Select an option from the menu: "))
   return selection
