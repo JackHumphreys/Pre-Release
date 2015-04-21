@@ -330,6 +330,7 @@ def display_pause_menu():
   print("1. Save Game")
   print("2. Quit to Menu")
   print("3. Return to Game")
+  print("4. Surrender")
 
 #############
 
@@ -340,17 +341,15 @@ def get_pause_menu_selection():
     print("Your input is invalid. Try again.")
     pause_menu_selection = int(input("Please select an option: "))
   if pause_menu_selection == 1:
-    save = save_game(Board)
     print("Save successful.")
   elif pause_menu_selection == 2:
     main_menu()
   elif pause_menu_selection == 3:
     pass
+  elif pause_menu_selection == 4:
+    ############################
   return pause_menu_selection
 
-def save_game(Board):
-  saved_board = Board
-  return saved_board
      
 def play_game(selection):
   Board = CreateBoard() #0th index not used
@@ -363,7 +362,6 @@ def play_game(selection):
     InitialiseBoard(Board, selection)
     while not(GameOver):
       DisplayBoard(Board)
-      #pdb.set_trace()
       DisplayWhoseTurnItIs(WhoseTurn)
       MoveIsLegal = False
       while not(MoveIsLegal):
