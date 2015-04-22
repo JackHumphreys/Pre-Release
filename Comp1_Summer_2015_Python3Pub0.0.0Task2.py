@@ -362,7 +362,7 @@ def surrender(WhoseTurn):
     print("White surrendered. Black wins!")
   else:
     print("Black surrendered. White wins!")
-
+  main_menu()
 
 def play_game(selection):
     Board = CreateBoard() #0th index not used
