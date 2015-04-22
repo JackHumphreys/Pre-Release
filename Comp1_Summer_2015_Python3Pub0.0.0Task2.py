@@ -425,7 +425,7 @@ def main_menu():
 
 
 if __name__ == "__main__":
-  while get_pause_menu_selection main_menu()
+  main_menu()
 
 
 
