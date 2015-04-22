@@ -205,7 +205,7 @@ def GetMove(StartSquare, FinishSquare, WhoseTurn):
       StartSquare = int(input("Enter coordinates of square containing piece to move (file first) or type '-1' for menu: "))
       if StartSquare == -1:
         display_pause_menu()
-        pause_selection = get_pause_menu_selection(WhoseTurn)
+        pause_selection, return_to_menu = get_pause_menu_selection(WhoseTurn)
       StartSquareString = str(StartSquare)
       while len(StartSquareString) != 2 :
         print("Please provide both FILE and RANK for this move.")
@@ -226,7 +226,7 @@ def GetMove(StartSquare, FinishSquare, WhoseTurn):
       correct2 = True
     except ValueError:
       print("Error! Please enter a valid integer.")
-  return StartSquare, FinishSquare
+  return StartSquare, FinishSquare, return_to_menu
 
 
 def MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
@@ -347,12 +347,12 @@ def get_pause_menu_selection(WhoseTurn):
   if pause_menu_selection == 1:
     print("Save successful.")
   elif pause_menu_selection == 2:
-    main_menu()
+    return_to_menu = True
   elif pause_menu_selection == 3:
     pass
   elif pause_menu_selection == 4:
-    surrender(WhoseTurn)
-  return pause_menu_selection
+    surrender(WhosTurn)
+  return pause_menu_selection, return_to_menu
 
 def surrender(WhoseTurn):
   print()
@@ -378,10 +378,10 @@ def play_game(selection):
         Turn = DisplayWhoseTurnItIs(WhoseTurn)
         MoveIsLegal = False
         while not(MoveIsLegal):
-          StartSquare, FinishSquare = GetMove(StartSquare, FinishSquare, WhoseTurn)
+          StartSquare, FinishSquare, return_to_menu = GetMove(StartSquare, FinishSquare, WhoseTurn)
           ConfirmationBoolean = ConfirmMove(StartSquare, FinishSquare)
           while ConfirmationBoolean == False:
-            StartSquare, FinishSquare = GetMove(StartSquare, FinishSquare,WhoseTurn)
+            StartSquare, FinishSquare, return_to_menu = GetMove(StartSquare, FinishSquare,WhoseTurn)
             ConfirmationBoolean = ConfirmMove(StartSquare, FinishSquare)
           StartRank = StartSquare % 10
           StartFile = StartSquare // 10
@@ -401,27 +401,34 @@ def play_game(selection):
       PlayAgain = input("Do you want to play again (enter Y for Yes)? ")
       if ord(PlayAgain) >= 97 and ord(PlayAgain) <= 122:
         PlayAgain = chr(ord(PlayAgain) - 32)
+      return return_to_menu
 
 
 
 def make_selection(selection):
     if selection == 1:
-      play_game(selection)
+      return_to_menu = play_game(selection)
     elif selection == 2:
       pass
     elif selection == 3:
-      WhoseTurn = play_game(selection)
+      return_to_menu = play_game(selection)
     elif selection == 4:
       pass
     elif selection == 5:
       pass
     elif selection == 6:
       quit()
+    return return_to_menu
 
 def main_menu():  
   display_menu()
   selection = get_menu_selection()    
-  make_selection(selection)
+  return_to_menu = make_selection(selection)
+  if return_to_menu == True:
+    print("You did it!")
+    display_menu()
+    selection = get_menu_selection()    
+    make_selection(selection)
 
 
 if __name__ == "__main__":
