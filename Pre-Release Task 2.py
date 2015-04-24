@@ -110,6 +110,9 @@ def CheckGisgigirMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile
 
 def CheckNabuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
   CheckNabuMoveIsLegal = False
+  for count in range(4):
+    if Board[StartRank + 1][StartFile + 1] != " ":
+      CheckNabuMoveIsLegal = False
   if abs(FinishFile - StartFile) > 1 and abs(FinishRank - StartRank) > 1:
     CheckNabuMoveIsLegal = True
   return CheckNabuMoveIsLegal
@@ -187,9 +190,15 @@ def InitialiseNewBoard(Board):
         elif FileNo == 3 or FileNo == 6:
           Board[RankNo][FileNo] = Board[RankNo][FileNo] + "N"
         elif FileNo == 4:
-          Board[RankNo][FileNo] = Board[RankNo][FileNo] + "M"
+          if Board[RankNo][FileNo] == "B": 
+            Board[RankNo][FileNo] = Board[RankNo][FileNo] + "S"
+          else:
+            Board[RankNo][FileNo] = Board[RankNo][FileNo] + "M"
         elif FileNo == 5:
-          Board[RankNo][FileNo] = Board[RankNo][FileNo] + "S"
+          if Board[RankNo][FileNo] == "B": 
+            Board[RankNo][FileNo] = Board[RankNo][FileNo] + "M"
+          else:
+            Board[RankNo][FileNo] = Board[RankNo][FileNo] + "S"
       else:
         Board[RankNo][FileNo] = "  "
 
@@ -339,6 +348,38 @@ def get_menu_selection():
     selection = int(input("Select an option from the menu: "))
   return selection
 
+def display_settings():
+  print()
+  print("1. Use Kashshaptu Piece")
+  print("9. Return to Main Menu")
+  print()
+
+def get_settings_selection():
+  settings_selection = int(input("Please select an option: "))
+  while 1 != settings_selection != 9:
+    print("Your input is invalid. Try again.")
+    settings_selection = int(input("Please select an option: "))
+  return settings_selection
+
+def make_settings_selection(settings_selection):
+  if settings_selection == 1:
+    kashshaptuConfirmation = input("Do you wish to use the kashshaptu piece (Y/N)?: ")
+    while not "Y" == kashshaptuConfirmation == "N":
+      print()
+      print("Your input is invalid. Try again.")
+      print()
+      kashshaptuConfirmation = input("Do you wish to use the kashshaptu piece (Y/N)?: ")
+    if kashshaptuConfirmation == "N":
+      setting_selection = 9
+    else:
+      print("Kashshaptu Activated")
+      #KashshaptuActivated = True
+      StopSettingLoop = True
+  elif settings_selection == 9:
+    StopSettingLoop = True
+  return StopSettingLoop
+  
+
 def display_pause_menu():
   print()
   print("Options")
@@ -423,7 +464,11 @@ def make_selection(selection):
     elif selection == 4:
       pass
     elif selection == 5:
-      pass
+      StopSettingLoop = False
+      while StopSettingLoop == False:
+        display_settings()
+        settings_selection = get_settings_selection()
+        StopSettingLoop = make_settings_selection(settings_selection)
     elif selection == 6:
       quit()
 
