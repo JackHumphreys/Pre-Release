@@ -110,11 +110,20 @@ def CheckGisgigirMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile
 
 def CheckNabuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
   CheckNabuMoveIsLegal = False
-  for count in range(4):
-    if Board[StartRank + 1][StartFile + 1] != " ":
-      CheckNabuMoveIsLegal = False
-  if abs(FinishFile - StartFile) > 1 and abs(FinishRank - StartRank) > 1:
+  FileDifference = abs(FinishFile - StartFile)
+  RankDifference = abs(FinishRank - StartRank)
+  if FileDifference == RankDifference:
     CheckNabuMoveIsLegal = True
+      #Diagonal Top right
+    if StartFile < FinishFile and StartRank > FinishRank:
+       for count in range(1, RankDifference + 1):
+         if Board[StartRank - count][StartFile + count] != "  ":
+           CheckNabuMoveIsLegal = False
+    elif StartFile > FinishFile and StartRank > FinishRank:
+       for count in range(1, RankDifference + 1):
+         if Board[StartRank - count][StartFile + count] != "  ":
+           CheckNabuMoveIsLegal = False
+
   return CheckNabuMoveIsLegal
 
 def CheckMarzazPaniMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
