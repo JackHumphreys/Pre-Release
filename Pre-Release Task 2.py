@@ -173,11 +173,11 @@ def CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseT
         MoveIsLegal = CheckEtluMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
   return MoveIsLegal
 
-def InitialiseBoard(Board, selection): 
+def InitialiseBoard(Board, selection, KashshaptuActivated): 
     if selection == 3: 
       InitialiseSampleBoard(Board)
     else:
-      InitialiseNewBoard(Board)                        
+      InitialiseNewBoard(Board, KashshaptuActivated)                        
 
 def InitialiseNewBoard(Board):
   for RankNo in range(1, BOARDDIMENSION + 1):
@@ -370,22 +370,24 @@ def get_settings_selection():
   return settings_selection
 
 def make_settings_selection(settings_selection):
+  KashshaptuActivated = False
   if settings_selection == 1:
     kashshaptuConfirmation = input("Do you wish to use the kashshaptu piece (Y/N)?: ")
-    while not "Y" == kashshaptuConfirmation == "N":
+    AcceptList = ["Y", "N"]
+    while kashshaptuConfirmation not in AcceptList:
       print()
       print("Your input is invalid. Try again.")
       print()
       kashshaptuConfirmation = input("Do you wish to use the kashshaptu piece (Y/N)?: ")
     if kashshaptuConfirmation == "N":
-      setting_selection = 9
+      StopSettingLoop = True
     else:
       print("Kashshaptu Activated")
       KashshaptuActivated = True
       StopSettingLoop = True
   elif settings_selection == 9:
     StopSettingLoop = True
-  return StopSettingLoop
+  return StopSettingLoop, KashshaptuActivated
   
 
 def display_pause_menu():
@@ -424,7 +426,7 @@ def surrender(WhoseTurn):
     print("Black surrendered. White wins!")
   main_menu()
 
-def play_game(selection):
+def play_game(selection, KashshaptuActivated):
     Board = CreateBoard() #0th index not used
     StartSquare = 0 
     FinishSquare = 0
@@ -432,7 +434,7 @@ def play_game(selection):
     while PlayAgain == "Y":
       WhoseTurn = "W"
       GameOver = False
-      InitialiseBoard(Board, selection)
+      InitialiseBoard(Board, selection, KashshaptuActivated)
       while not(GameOver):
         DisplayBoard(Board)
         Turn = DisplayWhoseTurnItIs(WhoseTurn)
@@ -464,11 +466,11 @@ def play_game(selection):
 
 def make_selection(selection):
     if selection == 1:
-        play_game(selection)
+        play_game(selection, KashshaptuActivated)
     elif selection == 2:
       pass
     elif selection == 3:
-        play_game(selection)
+        play_game(selection, KashshaptuActivated)
     elif selection == 4:
       pass
     elif selection == 5:
@@ -476,15 +478,22 @@ def make_selection(selection):
       while StopSettingLoop == False:
         display_settings()
         settings_selection = get_settings_selection()
-        StopSettingLoop = make_settings_selection(settings_selection)
+        StopSettingLoop, KashshaptuActivated = make_settings_selection(settings_selection)
+      StopMainMenuLoop = True
     elif selection == 6:
       quit()
+    return StopMainMenuLoop
 
 
 def main_menu():  
-    display_menu()
-    selection = get_menu_selection()    
-    make_selection(selection)
+    Start = True
+    while Start == True:
+      StopMainMenuLoop = False
+      while StopMainMenuLoop == False:
+        display_menu()
+        selection = get_menu_selection()    
+        StopMainMenuLoop = make_selection(selection)
+      StopMainMenuLoop = False
   
 
 
