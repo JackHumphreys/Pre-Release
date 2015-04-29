@@ -173,11 +173,11 @@ def CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseT
         MoveIsLegal = CheckEtluMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
   return MoveIsLegal
 
-def InitialiseBoard(Board, selection, KashshaptuActivated): 
+def InitialiseBoard(Board, selection): 
     if selection == 3: 
       InitialiseSampleBoard(Board)
     else:
-      InitialiseNewBoard(Board, KashshaptuActivated)                        
+      InitialiseNewBoard(Board)                        
 
 def InitialiseNewBoard(Board):
   for RankNo in range(1, BOARDDIMENSION + 1):
@@ -225,33 +225,32 @@ def InitialiseSampleBoard(Board):
                  
 def GetMove(StartSquare, FinishSquare, WhoseTurn):
   correct = False
-  while not correct:
-    try:
-      StartSquare = int(input("Enter coordinates of square containing piece to move (file first) or type '-1' for menu: "))
-      if StartSquare == -1:
-        display_pause_menu()
-        pause_selection = get_pause_menu_selection(WhoseTurn)
+  StopMainMenuLoop = False
+  #while not correct:#
+    StartSquare = int(input("Enter coordinates of square containing piece to move (file first) or type '-1' for menu: "))
+    if StartSquare == -1:
+      display_pause_menu()
+      pause_selection, StopMainMenuLoop = get_pause_menu_selection(WhoseTurn)
+    while pause_selection != 2 or StopMainMenuLoop != True:
       StartSquareString = str(StartSquare)
       while len(StartSquareString) > 2 or StartSquareString == "-1":
         print("Please provide both FILE and RANK for this move.")
         StartSquare = int(input("Enter coordinates of square containing piece to move (file first) or type '-1' for menu: "))
         StartSquareString = str(StartSquare)
       correct = True
-    except ValueError:
-      print("Error! Please enter a valid integer.")
-  correct2 = False
-  while not correct2:
-    try:  
-      FinishSquare = int(input("Enter coordinates of square to move piece to (file first): "))
-      FinishSquareString = str(FinishSquare)
-      while len(FinishSquareString) != 2:
-        print("Please provide both FILE and RANK for this move.")
-        FinishSquare = int(input("Enter coordinates of square to move piece to (file first): "))
-        FinishSquareString = str(FinishSquare)
-      correct2 = True
-    except ValueError:
-      print("Error! Please enter a valid integer.")
-  return StartSquare, FinishSquare
+      correct2 = False
+      while not correct2:
+        try:  
+          FinishSquare = int(input("Enter coordinates of square to move piece to (file first): "))
+          FinishSquareString = str(FinishSquare)
+          while len(FinishSquareString) != 2:
+            print("Please provide both FILE and RANK for this move.")
+            FinishSquare = int(input("Enter coordinates of square to move piece to (file first): "))
+            FinishSquareString = str(FinishSquare)
+          correct2 = True
+        except ValueError:
+          print("Error! Please enter a valid integer.")
+  return StartSquare, FinishSquare, StopMainMenuLoop
 
 
 def MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
@@ -409,12 +408,12 @@ def get_pause_menu_selection(WhoseTurn):
   if pause_menu_selection == 1:
     print("Save successful.")
   elif pause_menu_selection == 2:
-    main_menu()
+    StopMainMenuLoop = True
   elif pause_menu_selection == 3:
     pass
   elif pause_menu_selection == 4:
     surrender(WhoseTurn)
-  return pause_menu_selection
+  return pause_menu_selection, StopMainMenuLoop
 
 def surrender(WhoseTurn):
   print()
@@ -426,7 +425,8 @@ def surrender(WhoseTurn):
     print("Black surrendered. White wins!")
   main_menu()
 
-def play_game(selection, KashshaptuActivated):
+def play_game(selection):
+    StopMainMenuLoop = False
     Board = CreateBoard() #0th index not used
     StartSquare = 0 
     FinishSquare = 0
@@ -434,43 +434,49 @@ def play_game(selection, KashshaptuActivated):
     while PlayAgain == "Y":
       WhoseTurn = "W"
       GameOver = False
-      InitialiseBoard(Board, selection, KashshaptuActivated)
+      InitialiseBoard(Board, selection)
       while not(GameOver):
         DisplayBoard(Board)
         Turn = DisplayWhoseTurnItIs(WhoseTurn)
         MoveIsLegal = False
         while not(MoveIsLegal):
-          StartSquare, FinishSquare = GetMove(StartSquare, FinishSquare, WhoseTurn)
-          ConfirmationBoolean = ConfirmMove(StartSquare, FinishSquare)
-          while ConfirmationBoolean == False:
-            StartSquare, FinishSquare = GetMove(StartSquare, FinishSquare,WhoseTurn)
+          StartSquare, FinishSquare, StopMainMenuLoop = GetMove(StartSquare, FinishSquare, WhoseTurn)
+          if StopMainMenuLoop != True:
             ConfirmationBoolean = ConfirmMove(StartSquare, FinishSquare)
-          StartRank = StartSquare % 10
-          StartFile = StartSquare // 10
-          FinishRank = FinishSquare % 10
-          FinishFile = FinishSquare // 10
-          MoveIsLegal = CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
-          if not(MoveIsLegal):
-            print("That is not a legal move - please try again")
-        GameOver = CheckIfGameWillBeWon(Board, FinishRank, FinishFile)
-        MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
-        if GameOver:
-          DisplayWinner(WhoseTurn)
-        if WhoseTurn == "W":
-          WhoseTurn = "B"
-        else:
-          WhoseTurn = "W"
-      PlayAgain = input("Do you want to play again (enter Y for Yes)? ")
-      if ord(PlayAgain) >= 97 and ord(PlayAgain) <= 122:
-        PlayAgain = chr(ord(PlayAgain) - 32)
+            while ConfirmationBoolean == False:
+              StartSquare, FinishSquare, StopMainMenuLoop = GetMove(StartSquare, FinishSquare,WhoseTurn)
+              ConfirmationBoolean = ConfirmMove(StartSquare, FinishSquare)
+            StartRank = StartSquare % 10
+            StartFile = StartSquare // 10
+            FinishRank = FinishSquare % 10
+            FinishFile = FinishSquare // 10
+            MoveIsLegal = CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
+            if not(MoveIsLegal):
+              print("That is not a legal move - please try again")
+            GameOver = CheckIfGameWillBeWon(Board, FinishRank, FinishFile)
+            MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
+            if GameOver:
+              DisplayWinner(WhoseTurn)
+            if WhoseTurn == "W":
+              WhoseTurn = "B"
+            else:
+              WhoseTurn = "W"
+            PlayAgain = input("Do you want to play again (enter Y for Yes)? ")
+            if ord(PlayAgain) >= 97 and ord(PlayAgain) <= 122:
+              PlayAgain = chr(ord(PlayAgain) - 32)
+    return StopMainMenuLoop
 
 def make_selection(selection):
     if selection == 1:
-        play_game(selection, KashshaptuActivated)
+        StopMainMenuLoop = False
+        while StopMainMenuLoop == False:
+          StopMainMenuLoop = play_game(selection)
     elif selection == 2:
       pass
     elif selection == 3:
-        play_game(selection, KashshaptuActivated)
+        StopMainMenuLoop = False
+        while StopMainMenuLoop == False:
+          StopMainMenuLoop = play_game(selection)
     elif selection == 4:
       pass
     elif selection == 5:
