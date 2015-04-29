@@ -114,14 +114,13 @@ def CheckNabuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
   RankDifference = abs(FinishRank - StartRank)
   if FileDifference == RankDifference:
     CheckNabuMoveIsLegal = True
-      #Diagonal Top right
     if StartFile < FinishFile and StartRank > FinishRank:
        for count in range(1, RankDifference + 1):
          if Board[StartRank - count][StartFile + count] != "  ":
            CheckNabuMoveIsLegal = False
     elif StartFile > FinishFile and StartRank > FinishRank:
        for count in range(1, RankDifference + 1):
-         if Board[StartRank - count][StartFile + count] != "  ":
+         if Board[StartRank - count][StartFile - count] != "  ":
            CheckNabuMoveIsLegal = False
 
   return CheckNabuMoveIsLegal
@@ -382,7 +381,7 @@ def make_settings_selection(settings_selection):
       setting_selection = 9
     else:
       print("Kashshaptu Activated")
-      #KashshaptuActivated = True
+      KashshaptuActivated = True
       StopSettingLoop = True
   elif settings_selection == 9:
     StopSettingLoop = True
