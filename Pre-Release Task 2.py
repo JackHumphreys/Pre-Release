@@ -226,7 +226,7 @@ def InitialiseSampleBoard(Board):
 def GetMove(StartSquare, FinishSquare, WhoseTurn):
   correct = False
   StopMainMenuLoop = False
-  #while not correct:#
+  while correct == False and StopMainMenuLoop != True:
     StartSquare = int(input("Enter coordinates of square containing piece to move (file first) or type '-1' for menu: "))
     if StartSquare == -1:
       display_pause_menu()
@@ -401,6 +401,7 @@ def display_pause_menu():
 
 def get_pause_menu_selection(WhoseTurn):
   print()
+  StopSettingLoop = False
   pause_menu_selection = int(input("Please select an option: "))
   while pause_menu_selection > 4 or pause_menu_selection < 1:
     print("Your input is invalid. Try again.")
@@ -464,6 +465,10 @@ def play_game(selection):
             PlayAgain = input("Do you want to play again (enter Y for Yes)? ")
             if ord(PlayAgain) >= 97 and ord(PlayAgain) <= 122:
               PlayAgain = chr(ord(PlayAgain) - 32)
+          else:
+            MoveIsLegal = True
+            GameOver = True
+            PlayAgain = "N"
     return StopMainMenuLoop
 
 def make_selection(selection):
